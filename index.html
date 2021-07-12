@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>CreditList</title>
+
+	<link rel="stylesheet" href="style.css">
+	<script src="script.js"></script>
+</head>
+
+<body>
+	<div class="everything" id="everything">
+		<div class="default">
+			<div class="title">
+				<h1>CreditList</h1>
+			</div>
+			<div class="my-lists">
+				<h3>My Lists</h3>
+				<button onclick="create_list();">+ New List</button> or in the main link add "#" along with your list
+				name.
+				<p id="mine"></p>
+				<script>
+					mine = document.getElementById("mine")
+					lists = localStorage.getItem("all-lists").split("&&")
+					for (item of lists) {
+						if (item !== null && item !== "null" && item !== "") {
+							mine.innerHTML = mine.innerHTML + `<button id="lists/${item}" onclick="location.replace('#${item}'); location.reload();" oncontextmenu="delete_list('lists/${item}');">${item}</button>`
+						}
+					}
+					function create_list() {
+						name = prompt("List Name:");
+						if (name !== null && name !== "null") {
+							if (name.replaceAll(" ") !== "") {
+								localStorage.setItem("all-lists", name + "&&" + localStorage.getItem("all-lists"));
+								location.replace("#" + name);
+								location.reload();
+							}
+						}
+					}
+					function delete_list(id) {
+						delete_it = confirm("Delete List?");
+						if (delete_list) {
+							new_list = [];
+							for (item of localStorage.getItem("all-lists").split("&&")) {
+								if (item !== id.replace("lists/", "")) {
+									new_list.push(item);
+								}
+							}
+							localStorage.setItem("all-lists", new_list.join("&&"));
+						}
+						location.reload();
+					}
+				</script>
+			</div>
+			<div class="purpose">
+				<h3>Purpose</h3>
+				<p>
+					CreditList was made to maintain credit logs, where did the contributions come from.
+					It is simple to use and easy to maintain.
+					You can add and remove credits accordingly.
+				</p>
+			</div>
+			<div class="pricing">
+				<h3>Princing</h3>
+				<p>
+					It makes no sense for making such a simple app paid.
+					Its absolutely free except you just need internet.
+					You can make unlimited amount of credit lists.
+				</p>
+			</div>
+			<div class="privacy">
+				<h3>Privacy and Networking</h3>
+				<p>
+					This is a really simple project so that means it is not capable of doing many things.
+					Networking and shared lists is not a thing yet.
+					For privacy, it is completely private and only visible on your system.
+					This app uses local storage, that is similar to cookies but no data is sent to creators.
+					This app is completely free and requires no personal information or credentials.
+				</p>
+			</div>
+		</div>
+	</div>
+</body>
+
+<script>
+	window.addEventListener("contextmenu", e => e.preventDefault());
+	if (location.href.split("#").length != 1 || location.href.split("#")[1] != "") {
+		document.getElementById("everything").innerHTML = `<div class="card-collection" id="${location.href.split("#")[1].toLowerCase()}"></div>`;
+		draw();
+	}
+</script>
+
+</html>
